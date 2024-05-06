@@ -4,3 +4,4 @@
 
 ### CSS
 * The `id = ""` attribute identifies elements uniqely while the `class = ""` attribute can be shared by multiple elements.
+* ` a pt ( a point metric) ` is what MS office uses. E.g when the font siz is 12, it implies  12 pt (12 points). This can give a rough idea of the font-size/weight one is setting. A `px` is smaller.
