@@ -5,3 +5,16 @@ ol {
 }
 
 /* Write your CSS below, don't change the rules above. */
+p{
+  color: red;
+}
+
+.note{
+  font-size: 20px;
+}
+li[value = "4"],li[value = "5"]{
+  color: blue;
+}
+*{
+  text-align: center;
+}
