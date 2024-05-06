@@ -1,0 +1,2 @@
+* When using the `<img />` tag, always provide alternative text using the `alt` attribute for webiste readers. This will for example help visually impaired individuals scan/read through the webiste withoou seeing a thing 
+* the `public folder 📁` in in th HTML projects usually contains all the .HTML files that are not index.html
