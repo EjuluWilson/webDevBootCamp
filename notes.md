@@ -12,3 +12,6 @@
 
 >CSS Cascading levels
 ![cascading levels](./css_cascading_levels.jpg)
+
+>Combining selectors in CSS
+![Combining Css Selectors Image](./combining_selecotors.png)
