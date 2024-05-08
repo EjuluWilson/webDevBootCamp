@@ -8,3 +8,4 @@
 * In CSS, font-size adjusts text size while font-weight controls text thickness or boldness.
 * Use the `div elemetn`to layout or style elements together. It groups elements.
 * use the `pesticide` extension to visualise `<div> </div>`
+* The `height` and `width` properties are for the inner most box (where the content of the element is to be placed). This can pause challnegs when calculating the dimentions of your element. To resolve this, use the `box-sizing: border-box` property. This which make the height and width property refere to the height of the elememt up to the border (excluding the margin). This can simplify calcualtions.
