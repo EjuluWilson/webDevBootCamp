@@ -15,3 +15,21 @@
 
 >Combining selectors in CSS
 ![Combining Css Selectors Image](./combining_selecotors.png)
+
+## CSS Positioning
+
+### Static
+- **Default position:** Elements follow the normal document flow, stacking one after the other.
+- **Offsets:** (`top`, `right`, `bottom`, `left`) do not apply.
+
+### Relative
+- **Position:** Moves an element relative to its normal position in the document flow.
+
+### Absolute
+- **Position:** Relative to the nearest parent with a non-static position. If no such parent exists, it positions relative to the initial containing block (typically the HTML document).
+
+### Fixed
+- **Position:** Fixed relative to the viewport, unaffected by scrolling.
+
+### Z-index (Stacking Context)
+- Think of it like the z axis coming out of the screen. The highert the z-axis value, the more top/ outer the element is the `default value is 0`. Values can be negative as well.
