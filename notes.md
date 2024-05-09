@@ -26,14 +26,14 @@
 
 ## CSS Positioning
 
-### Static
+#### Static
 - **Default position:** Elements follow the normal document flow, stacking one after the other.
 - **Offsets:** (`top`, `right`, `bottom`, `left`) do not apply.
 
-### Relative
+#### Relative
 - **Position:** Moves an element relative to its normal position in the document flow.
 
-### Absolute
+#### Absolute
 - **Position:** Relative to the nearest parent with a non-static position. If no such parent exists, it positions relative to the initial containing block (typically the HTML document).
 
 ### Fixed
@@ -41,3 +41,11 @@
 
 ### Z-index (Stacking Context)
 - Think of it like the z axis coming out of the screen. The highert the z-axis value, the more top/ outer the element is the `default value is 0`. Values can be negative as well.
+
+## CSS `display` Property 
+
+- **Block** (default): Each element starts on a new line and extends across the full available width.
+- **Inline**: Elements line up one after another horizontally, like words in a sentence. They only take up as much space as their content needs.
+- **Inline-Block**: Combines features of both inline and block. Elements line up horizontally but you can set their width and height.
+- **None**: Completely hides the element, making it invisible and unclickable.
+
