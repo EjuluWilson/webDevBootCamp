@@ -9,12 +9,20 @@
 * Use the `div elemetn`to layout or style elements together. It groups elements.
 * use the `pesticide` extension to visualise `<div> </div>`
 * The `height` and `width` properties are for the inner most box (where the content of the element is to be placed). This can pause challnegs when calculating the dimentions of your element. To resolve this, use the `box-sizing: border-box` property. This which make the height and width property refere to the height of the elememt up to the border (excluding the margin). This can simplify calcualtions.<br><br>
+##### Behavior of an Unstyled Inner `<div>`
+
+- **Block-Level**: Starts on a new line, extends full available width.
+- **No Visual Distinction**: Appears the same as its parent without specific CSS.
+- **Inheritance**: Inherits font and color properties from parent.
+- **Margins and Padding**: Defaults to no margins or padding unless specified.
+- **Content Flow**: Contains elements (e.g., `<p>`) that also behave as block-level. <br> <br>
 
 >CSS Cascading levels
 ![cascading levels](./css_cascading_levels.jpg)
 
 >Combining selectors in CSS
-![Combining Css Selectors Image](./combining_selecotors.png)
+![Combining Css Selectors Image](./combining_selectors.png)
+![Combining Css Selectors Image](./combining_selectors_2.png)
 
 ## CSS Positioning
 
