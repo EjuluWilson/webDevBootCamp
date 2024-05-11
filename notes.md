@@ -49,3 +49,26 @@
 - **Inline-Block**: Combines features of both inline and block. Elements line up horizontally but you can set their width and height.
 - **None**: Completely hides the element, making it invisible and unclickable.
 
+
+# Flexbox Sizing and Default Values
+
+Flexbox provides several properties to manage the sizing of items within a container. Understanding the default values and how these properties interact is crucial for mastering layout with Flexbox.
+
+#### Default Values
+
+- **`flex-grow`**: The default value is `0`. This means, by default, flex items won't grow beyond their initial size to fill the container.
+- **`flex-shrink`**: The default value is `1`. This implies that flex items can shrink if necessary, to prevent overflowing the container.
+- **`flex-basis`**: The default value is `auto`, meaning the size of the item is based on its content or specified dimensions.
+- **`flex`**: The shorthand defaults to `0 1 auto`, which combines the three properties: `flex-grow: 0`, `flex-shrink: 1`, `flex-basis: auto`.
+
+#### Size Calculation Priority
+
+Flexbox sizing follows a specific order of priority when calculating the actual size of an item:
+
+1. **Content size**: If `flex-basis` is set to `auto`, the size of the content determines the base size. If there's no explicit size set, the content's natural size is used.
+2. **Width/Height**: If specified, this will override the content size unless `flex-basis` is set to something other than `auto`.
+3. **`flex-basis`**: This property takes priority over the content size but can be overridden by explicitly set width/height. If `flex-basis` is set to any specific value (like `50%`, `200px`, etc.), it dictates the starting size before flex-grow or flex-shrink are applied.
+4. **`min-width`/`max-width`**: These constraints apply last and can override all previous settings. `min-width` ensures a flex item cannot be smaller than the specified value, regardless of the `flex-shrink` settings, while `max-width` ensures that the flex item cannot grow larger than the specified value, regardless of the `flex-grow` settings.
+
+
+
