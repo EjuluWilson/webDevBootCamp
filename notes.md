@@ -70,5 +70,20 @@ Flexbox sizing follows a specific order of priority when calculating the actual 
 3. **`flex-basis`**: This property takes priority over the content size but can be overridden by explicitly set width/height. If `flex-basis` is set to any specific value (like `50%`, `200px`, etc.), it dictates the starting size before flex-grow or flex-shrink are applied.
 4. **`min-width`/`max-width`**: These constraints apply last and can override all previous settings. `min-width` ensures a flex item cannot be smaller than the specified value, regardless of the `flex-shrink` settings, while `max-width` ensures that the flex item cannot grow larger than the specified value, regardless of the `flex-grow` settings.
 
+### Understanding the Flexbox Shorthand: `flex`
+
+The `flex` property is a shorthand for setting `flex-grow`, `flex-shrink`, and `flex-basis` together. It simplifies the configuration of flex items within a container.
+
+#### Syntax
+- **General form**: `flex: [flex-grow] [flex-shrink] [flex-basis]`
+- **Common usage**: `flex: 1` or `flex: 0 1 auto`
+
+#### Components
+- **`flex-grow`**: Controls the proportion of available space the item should take after filling the initial size. A value of `0` means no expansion.
+- **`flex-shrink`**: Dictates how the item should shrink relative to others in the container. A value of `0` prevents it from shrinking.
+- **`flex-basis`**: Sets the initial main size of the item before remaining space is distributed. Specifying this as a percentage (`10%`, `50%`, etc.) sets the size relative to the container's size.
+
+#### Example
+- **`flex: 1 0 10%`**: The item will grow to fill extra space if available, will not shrink, and starts with a size of 10% of the container’s total size.
 
 
