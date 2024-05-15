@@ -1,42 +1,58 @@
 body {
-    font-family: "Sono", sans-serif;
-  }
+  font-family: "Sono", sans-serif;
+}
+
+.pricing-container{
+   display: flex;
+   flex-direction: row;
+   justify-content: center;
+   gap: 50px;
+   height: 100vh;
+   align-items: center;
+
+}
+
+.pricing-plan{
+  height: 400px;
+  width: 400px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f2f2f2;
+
+}
+
+.plan-title{
+  font-weight: bold;
+  
+}
+.plan-price{
+  font-weight: bold;
+  font-size: 50px;
+
+}
+.plan-features{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.plan-button{
+  background-color: #ff6600;
+  border: none;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 10px;
+
+}
 
 
-  .pricing-plan{
-    display: flex;
-    background-color: #f2f2f2;
-    width: 250px;
-    height: 250px;
-    flex-shrink: 0;
-  }
-
-  .plan-button{
-    background-color: #ff6600;
-    border: none;
-    padding: 10px;
-    border-radius: 15%;
-    color: white;
-  }
-
+/* Hint: What can you do with a media query and flexbox? */
+@media (max-width: 1250px) {
   .pricing-container{
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    gap: 50px;
-    height: 100vh;
-    align-items: center;
-  }
-
-
-    /* Hint: What can you do with a media query and flexbox? */
-    @media (max-width: 1250px) {
-
-        .pricing-container{
-    
-            display: flex;
-            flex-direction: column;
-
-          }
-
-    }
+    flex-direction: column;
+ 
+ }
+}
