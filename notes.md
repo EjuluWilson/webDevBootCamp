@@ -49,8 +49,11 @@
 - **Inline-Block**: Combines features of both inline and block. Elements line up horizontally but you can set their width and height.
 - **None**: Completely hides the element, making it invisible and unclickable.
 
+# Flexbox
+> There are two axis: The main-axis(horizontal by default) and the cros-axis(perpendicular to the main). The `flex-direction` determines the direction of the main axis. The  `justify-content` property aligns items along the main a-xis
+while the `align-content` property aligns along the main-axis.
 
-# Flexbox Sizing and Default Values
+### Flexbox Sizing and Default Values
 
 Flexbox provides several properties to manage the sizing of items within a container. Understanding the default values and how these properties interact is crucial for mastering layout with Flexbox.
 
@@ -85,5 +88,9 @@ The `flex` property is a shorthand for setting `flex-grow`, `flex-shrink`, and `
 
 #### Example
 - **`flex: 1 0 10%`**: The item will grow to fill extra space if available, will not shrink, and starts with a size of 10% of the container’s total size.
+
+### Display-Grid
+- When grid-items using the `grid-area` property, ensure that all the related components are using the same property for things to work out well.
+- `grid-area: top/left/bottom/right`
 
 
