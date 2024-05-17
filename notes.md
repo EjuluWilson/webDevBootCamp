@@ -93,4 +93,9 @@ The `flex` property is a shorthand for setting `flex-grow`, `flex-shrink`, and `
 - When grid-items using the `grid-area` property, ensure that all the related components are using the same property for things to work out well.
 - `grid-area: top/left/bottom/right`
 
+# Bootstrap
+- To overwite bootrap css using an external style sheet, place the link for the external CSS below the Boostrap one.
+- `col-size(sm/lg/xlg etc) val` implies the size of the compopent when the screen size of the display is of size and above. e.g `col-lg-6` implies occupying 6 cols for screens that are `lg` and above.  
+**Note:** If the screen size comes below that specified, the class defaults to `col` (to full width).
+
 
