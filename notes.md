@@ -98,4 +98,9 @@ The `flex` property is a shorthand for setting `flex-grow`, `flex-shrink`, and `
 - `col-size(sm/lg/xlg etc) val` implies the size of the compopent when the screen size of the display is of size and above. e.g `col-lg-6` implies occupying 6 cols for screens that are `lg` and above.  
 **Note:** If the screen size comes below that specified, the class defaults to `col` (to full width).
 
+# UI/UX
+> Color theory
+![Color theory](./color_moods.png)
 
+>Font theory
+![Font theory](./font_theory.png)
