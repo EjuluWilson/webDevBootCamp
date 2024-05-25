@@ -104,3 +104,11 @@ The `flex` property is a shorthand for setting `flex-grow`, `flex-shrink`, and `
 
 >Font theory
 ![Font theory](./font_theory.png)
+
+
+---
+---
+
+# Javascript
+
+- `===` evaluates both the datatype and value. `==` does not care about the data type. Similary, use `!==`.
