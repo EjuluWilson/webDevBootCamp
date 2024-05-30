@@ -27,7 +27,7 @@ if (play1Roll === play2Roll){
 }else if(play1Roll > play2Roll){
     h1.innerHTML = "⛳️ Player 1️⃣ WINS!!";
 }else{
-    h1.innerHTML = " Player 2️⃣ WINS!! ⛳️";
+    h1.innerHTML = "  Player 2️⃣ WINS!! ⛳️";
 }
 
 
