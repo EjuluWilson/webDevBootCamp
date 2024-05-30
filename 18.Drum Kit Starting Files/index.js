@@ -36,13 +36,24 @@ function playSound(keyLetter) {
   }
 }
 
+//Function to anumate a key press
+function animateKeyDown(keyLetter) {
+  let keyElement = document.querySelector(`.drum.${keyLetter}`);
+  keyElement.classList.add("pressed");
+  setTimeout(() => {
+    keyElement.classList.remove("pressed");
+  }, 100);
+}
+
 for (let i = 0; i < drumKeys.length; i++) {
   drumKeys[i].addEventListener("click", function () {
     let keyLetter = drumKeys[i].innerHTML;
     playSound(keyLetter);
+    animateKeyDown(keyLetter);
   });
 }
 
 document.addEventListener("keydown", function (event) {
-    playSound(event.key);
+  playSound(event.key);
+  animateKeyDown(event.key);
 });
