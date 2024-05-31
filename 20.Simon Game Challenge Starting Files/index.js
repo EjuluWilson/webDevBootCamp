@@ -84,6 +84,8 @@ function compareTwoLists(list1, list2) {
 $(document).on("keydown", function () {
   numClick = 0;
   gameLevel = 0;
+  generatedPattern = [];
+  playerPattern = [];
   nextLevel();
 });
 
@@ -119,14 +121,8 @@ $(".btn").click(function () {
       nextLevel();
     } else {
       console.log("Failed game, start over");
-      //reset on fail
-      numClick = 0;
-      gameLevel = 1;
-      generatedPattern = [];
-      playerPattern = [];
+      //Fail
+      $("#level-title").text("Game Over, Press Any Key to restart");
     }
   }
-
-  console.log(generatedPattern);
-  console.log(playerPattern);
 });
