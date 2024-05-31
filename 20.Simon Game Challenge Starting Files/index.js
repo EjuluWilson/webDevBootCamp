@@ -21,49 +21,62 @@ function animateKeyDown(keyDown) {
     keyDown.removeClass("pressed");
   }, 100);
 }
+//animate added key
+function animateAddedKey(color) {
+  let addedColor = $(`.btn.${color}`);
+  addedColor.addClass("pressed");
+  setTimeout(() => {
+    addedColor.removeClass("pressed");
+  }, 100);
+}
+
+//update gameLevel
+function updateLevelTitle(level) {
+  $("#level-title").text(`Level ${level}`);
+}
+
+//next Level
+function nextLevel() {
+  //change game level
+  gameLevel += 1;
+  updateLevelTitle(gameLevel);
+  //accumulate generated pattern
+  let keyNum = randomClick();
+  generatedPattern.push(keyNum);
+  //Animate added key
+  switch (keyNum) {
+    case greenClick:
+      animateAddedKey("green");
+      break;
+    case redClick:
+      animateAddedKey("red");
+      break;
+    case yellowClick:
+      animateAddedKey("yellow");
+      break;
+    case blueClick:
+      animateAddedKey("blue");
+      break;
+    default:
+      break;
+  }
+}
+
+//listen to any click
+$(document).on("keydown", function () {
+  numClick = 0;
+  gameLevel = 0;
+  nextLevel();
+});
 
 //listen to a click event
 $(".btn").click(function () {
   let keyDown = $(this); //get button element
   animateKeyDown(keyDown);
 
-  //animate added key
-  function animateAddedKey(color) {
-    let addedColor = $(`.btn.${color}`);
-    addedColor.addClass("pressed");
-    setTimeout(() => {
-      addedColor.removeClass("pressed");
-    }, 100);
-  }
-
-  numClick += 1;
+  numClick += 1; // number of clicks
 
   if (numClick >= 1) {
-
-
-    //change game level
-    gameLevel += 1;
-    //accumulate generated patter
-    let keyNum = randomClick();
-    generatedPattern.push(keyNum);
-    //Animate added key
-    switch (keyNum) {
-      case greenClick:
-        animateAddedKey("green");
-        break;
-      case redClick:
-        animateAddedKey("red");
-        break;
-      case yellowClick:
-        animateAddedKey("yellow");
-        break;
-      case blueClick:
-        animateAddedKey("blue");
-        break;
-      default:
-        break;
-    }
-
     //accumulate player pattern
     switch (keyDown.attr("id")) {
       case "green":
@@ -87,6 +100,7 @@ $(".btn").click(function () {
       //comapare user pattern
       if (generatedPattern === playerPattern) {
         //add random to
+        nextLevel();
       } else {
         //reset on fail
         numClick = 0;
@@ -96,4 +110,7 @@ $(".btn").click(function () {
       }
     }
   }
+  console.log(generatedPattern);
+  console.log(playerPattern);
+  console.log(randomClick());
 });
