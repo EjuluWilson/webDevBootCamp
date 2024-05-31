@@ -112,3 +112,4 @@ The `flex` property is a shorthand for setting `flex-grow`, `flex-shrink`, and `
 # Javascript
 
 - `===` evaluates both the datatype and value. `==` does not care about the data type. Similary, use `!==`.
+- `() =>` Arrow functions do not have their own this context. Instead, they inherit this from the surrounding lexical scope. This makes them unsuitable for event handlers if you need this to refer to the event target. However, they are useful in other contexts where you want to maintain the this context from the enclosing scope.
