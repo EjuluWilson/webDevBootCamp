@@ -37,6 +37,8 @@ function updateLevelTitle(level) {
 
 //next Level
 function nextLevel() {
+  // Reset player
+  playerPattern = [];
   //change game level
   gameLevel += 1;
   updateLevelTitle(gameLevel);
@@ -60,6 +62,22 @@ function nextLevel() {
     default:
       break;
   }
+
+  console.log(`Next level added: generated: ${generatedPattern}`);
+}
+
+//compare two lists
+function compareTwoLists(list1, list2) {
+  if (list1.length !== list2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < list1.length; i++) {
+    if (list1[i] !== list2[i]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 //listen to any click
@@ -76,41 +94,39 @@ $(".btn").click(function () {
 
   numClick += 1; // number of clicks
 
-  if (numClick >= 1) {
-    //accumulate player pattern
-    switch (keyDown.attr("id")) {
-      case "green":
-        playerPattern.push(greenClick);
-        break;
-      case "red":
-        playerPattern.push(redClick);
-        break;
-      case "yellow":
-        playerPattern.push(yellowClick);
-        break;
-      case "blue":
-        playerPattern.push(blueClick);
-        break;
-      default:
-        break;
-    }
+  switch (keyDown.attr("id")) {
+    case "green":
+      playerPattern.push(greenClick);
+      break;
+    case "red":
+      playerPattern.push(redClick);
+      break;
+    case "yellow":
+      playerPattern.push(yellowClick);
+      break;
+    case "blue":
+      playerPattern.push(blueClick);
+      break;
+    default:
+      break;
+  }
 
-    //compare patterns when the length is the same
-    if (generatedPattern.length === playerPattern.length) {
-      //comapare user pattern
-      if (generatedPattern === playerPattern) {
-        //add random to
-        nextLevel();
-      } else {
-        //reset on fail
-        numClick = 0;
-        gameLevel = 0;
-        generatedPattern = [];
-        playerPattern = [];
-      }
+  // Compare lists if player's pattern is complete
+  if (playerPattern.length === generatedPattern.length) {
+    if (compareTwoLists(generatedPattern, playerPattern)) {
+      //add random to
+      console.log("win , go to the next level");
+      nextLevel();
+    } else {
+      console.log("Failed game, start over");
+      //reset on fail
+      numClick = 0;
+      gameLevel = 1;
+      generatedPattern = [];
+      playerPattern = [];
     }
   }
+
   console.log(generatedPattern);
   console.log(playerPattern);
-  console.log(randomClick());
 });
