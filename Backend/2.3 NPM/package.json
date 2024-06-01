@@ -1,0 +1,15 @@
+{
+  "name": "npm-learn",
+  "version": "1.0.0",
+  "description": "I am learning npm",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "wilson Ejulu",
+  "license": "ISC",
+  "dependencies": {
+    "superheroes": "^4.0.0"
+  }
+}
