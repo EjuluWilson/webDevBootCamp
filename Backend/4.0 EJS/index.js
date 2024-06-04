@@ -13,7 +13,7 @@ app.set("veiw engine", "ejs");
 const day = 0;
 
 let today = "weekday";
-let advice = "chase the bag";
+let advice = "chase the bag!!!!!";
 
 app.get("/", (req, res) => {``
 
