@@ -20,7 +20,7 @@ app.get("/",(req,res)=>{
 
 app.post("/check",(req, res)=>{
     console.log(req.body.password);
-    let password = req.body.password;
+    const password = req.body.password;
     if (password === "ejulu"){
         res.sendFile(__dirname + "/public/secret.html");
     }else{
