@@ -24,7 +24,10 @@
       <ul id="ingredientsList">
         <li><%= proteinName %> ,<%= proteinPreparation %></li>
         <li><%= salsaName %></li>
-        <li>Every other topping</li>
+
+        <% toppingsList.forEach(topping =>{ %>
+        <li><%= topping %></li>
+        <% }) %>
       </ul>
       <% } %>
     </div>
