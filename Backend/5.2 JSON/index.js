@@ -22,6 +22,7 @@ let choiceData;
 let choiceResponse = {
   recipename: undefined,
   proteinName: undefined,
+  proteinPreparation: undefined,
   salsaName: undefined,
   toppingsList: undefined,
 };
@@ -45,6 +46,7 @@ app.post("/recipe", (req, res) => {
   }
   choiceResponse.recipename = choiceData.name;
   choiceResponse.proteinName = choiceData.ingredients.protein.name;
+  choiceResponse.proteinPreparation = choiceData.ingredients.protein.preparation;
   choiceResponse.salsaName = choiceData.ingredients.salsa.name;
   choiceResponse.toppingsList = choiceData.ingredients.toppings;
 
