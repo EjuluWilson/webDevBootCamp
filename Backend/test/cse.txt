@@ -1,0 +1,16 @@
+Exercise
+Create a program that simulates downloading files from the internet. Your program should:
+
+Define a downloadFile function that takes two parameters: the name of the file and a callback function.
+Simulate the download process using setTimeout, where each file takes a random amount of time between 1 to 3 seconds to download.
+After the download is complete, the callback function should be called with the name of the downloaded file.
+Define a callback function processDownloadedFile that logs the downloaded file's name to the console.
+Download three different files ("file1.txt", "file2.txt", "file3.txt") using the downloadFile function and process each file using the processDownloadedFile callback function.
+Requirements
+Use a random delay between 1 to 3 seconds to simulate the download time.
+Ensure each file's download completion is logged to the console.
+Steps to Follow
+Implement the downloadFile function to simulate the download process.
+Implement the processDownloadedFile callback function to log the downloaded file's name.
+Call the downloadFile function three times with different file names and the same callback function.
+Write the code from scratch based on these instructions and share it here for analysis.
