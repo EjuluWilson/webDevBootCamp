@@ -356,7 +356,7 @@ Authorization: Bearer abc123xyz789
 ## Summary
 Bearer authentication uses tokens for secure access to resources. It's more secure than basic and API key authentication.
 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>
 # Types of Authorization
 
 ## 1. No Authorization
