@@ -113,3 +113,379 @@ The `flex` property is a shorthand for setting `flex-grow`, `flex-shrink`, and `
 
 - `===` evaluates both the datatype and value. `==` does not care about the data type. Similary, use `!==`.
 - `() =>` Arrow functions do not have their own this context. Instead, they inherit this from the surrounding lexical scope. This makes them unsuitable for event handlers if you need this to refer to the event target. However, they are useful in other contexts where you want to maintain the this context from the enclosing scope.
+- Can't compare lists like in python.
+
+#### Async await, promises and callbacks.
+- In js, none blocking code (asynchronous code) is pull await from the single executing thread buy browser or nodejs mechanisms, tracked and placed back in the thread after execution.
+- `Async await`, is syntactic sugar around promises. It always returns a promise. You can then go ahead to use the then and catch methods on what is returned if need b.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Types of Authentication
+
+## 1. No Authentication
+- **Description**: No authentication is required to access the resource.
+- **Use Case**: Public information or resources.
+
+## 2. Basic Authentication
+- **Description**: User provides a username and password with each request.
+- **Use/Authentication Process**:
+  - User sends a request with a username and password encoded in the `Authorization` header.
+  - Server decodes the credentials and verifies them.
+  - Access is granted if credentials are correct.
+- **Implementation**:
+  - Username and password are base64 encoded and included in the `Authorization` header.
+  - Example header: `Authorization: Basic dXNlcm5hbWU6cGFzc3dvcmQ=`
+- **Security**:
+  - Passwords should be hashed before storing in the database (e.g., using bcrypt).
+  - Passwords are transmitted with each request, so use HTTPS to encrypt the connection.
+
+```plaintext
+Database:
+| Username | Hashed Password                       |
+|----------|---------------------------------------|
+| alice123 | $2a$12$Wz/tQH4bJtWhuC9fVBSjb.e5BFLnPA |
+```
+
+## 3. API Key Authentication
+- **Description**: A unique API key is provided to access the resource.
+- **Use/Authentication Process**:
+  - User includes the API key in the request header or as a query parameter.
+  - Server verifies the API key.
+  - Access is granted if the API key is valid.
+- **Implementation**:
+  - The server issues a unique API key to the user.
+  - The user includes the API key in the request header or as a query parameter.
+  - Example header: `Authorization: ApiKey 123456789abcdef`
+- **Security**:
+  - API keys should be stored securely and not exposed in client-side code.
+  - Rotate API keys periodically and revoke compromised keys.
+
+```plaintext
+Database:
+| User ID | API Key                                |
+|---------|----------------------------------------|
+| 1       | 123456789abcdef                       |
+```
+
+## 4. Token-Based Authentication
+- **Description**: Verifies a user's identity and manages sessions using tokens.
+- **Use/Authentication Process**:
+  - User logs in with username and password.
+  - Server verifies credentials and issues a token.
+  - User stores the token and includes it in the `Authorization` header for subsequent requests.
+  - Server verifies the token on each request.
+  - Access is granted if the token is valid.
+- **Implementation**:
+  - User logs in with username and password.
+  - Server issues a token (e.g., JWT) upon successful login.
+  - User includes the token in the `Authorization` header for subsequent requests.
+  - Example header: `Authorization: Bearer abc123xyz789`
+- **Security**:
+  - Tokens should be signed and can include expiration times.
+  - Use HTTPS to secure token transmission.
+  - Tokens should be stored securely on the client side.
+
+```plaintext
+Database:
+| Username | Hashed Password                       | JWT Secret Key                        |
+|----------|---------------------------------------|---------------------------------------|
+| alice123 | $2a$12$Wz/tQH4bJtWhuC9fVBSjb.e5BFLnPA | 4b9824f529bf965e1aaf0b8c3b2e8e10     |
+```
+
+## 5. OAuth with OpenID Connect
+- **Description**: Authorizes third-party applications to access user resources and can also handle authentication.
+- **Use/Authentication Process**:
+  - User is redirected to the OAuth provider (e.g., Google) for authentication.
+  - User logs in and consents to share information.
+  - Provider issues an authorization code.
+  - Application exchanges the code for access and ID tokens.
+  - Application verifies the ID token and uses it to authenticate the user.
+- **Implementation**:
+  - User is redirected to the OAuth provider with `client_id`, `redirect_uri`, `response_type`, and `scope`.
+  - User logs in and consents to share information.
+  - Provider redirects back with an authorization code.
+  - Application exchanges the authorization code for tokens.
+  - Example header: `Authorization: Bearer access_token`
+- **Security**:
+  - Tokens are short-lived and can be revoked.
+  - Scopes and permissions can be fine-tuned.
+  - Use HTTPS to secure token transmission and redirections.
+
+```plaintext
+Database:
+| User ID | OAuth Provider | OAuth ID                  | Session Token                        |
+|---------|----------------|---------------------------|--------------------------------------|
+| 1       | Google         | 1234567890abcdef          | abc123xyz789                         |
+```
+
+## Summary
+- **No Authentication**: Public access with no security.
+- **Basic Authentication**: Simple but transmits credentials with each request.
+- **API Key Authentication**: Provides a unique key, but key management is crucial.
+- **Token-Based Authentication**: Secure session management with tokens.
+- **OAuth with OpenID Connect**: Robust authorization and authentication using third-party providers.
+
+>## Examples
+
+### 1) Token-Based Authentication for Library Application
+
+### Overview
+Token-based authentication verifies a user's identity and manages sessions using tokens.
+
+### Steps
+
+1. **User Registration**
+   - User provides username and password.
+   - Server hashes the password and stores username and hashed password.
+
+2. **User Login**
+   - User logs in with username and password.
+
+3. **Token Issuance**
+   - Server verifies credentials.
+   - Server issues a token (e.g., JWT) if credentials are correct.
+
+4. **Token Storage**
+   - User stores the token on their device (e.g., in local storage).
+
+5. **Subsequent Requests**
+   - User includes the token in request headers.
+
+6. **Token Verification**
+   - Server verifies the token on each request.
+
+7. **Access Granted**
+   - If the token is valid, the server processes the request and grants access.
+
+### Summary
+- **User Registration**: Store hashed passwords securely.
+- **User Login**: Authenticate using username and password.
+- **Token Issuance**: Issue a token upon successful login.
+- **Token Storage**: User stores the token locally.
+- **Token Usage**: Include token in request headers for subsequent requests.
+- **Token Verification**: Server verifies token validity on each request.
+- **Access Control**: Grant access based on token validity.
+
+### 2) OAuth with OpenID Connect for Library Application
+
+#### Overview
+OAuth with OpenID Connect authenticates users via a third-party provider (like Google) and manages sessions in the library application.
+
+#### Steps
+
+1. **User Initiates Sign Up/Sign In**
+   - Click "Sign in with Google."
+
+2. **Redirect to Google for Authentication**
+   - Redirect to Google's OAuth server with `client_id`, `redirect_uri`, `response_type`, and `scope`.
+
+3. **User Authenticates with Google**
+   - Log in and consent to share information.
+
+4. **Google Sends Authorization Code to Library**
+   - Google redirects back with an authorization code.
+
+5. **Library Exchanges Authorization Code for Tokens**
+   - Exchange authorization code for access and ID tokens.
+
+6. **Google Returns Tokens**
+   - Receive access and ID tokens.
+
+7. **Library Verifies and Uses ID Token**
+   - Verify ID token and retrieve user information (e.g., email, Google ID).
+   - Sign up/sign in user and issue session token.
+
+8. **User is Signed In**
+   - Create session and issue session token for accessing resources.
+
+#### Summary
+- **Authenticate via Google**: Use OAuth and OpenID Connect.
+- **User Info**: Retrieve and verify user info from ID token.
+- **Session Management**: Library issues its own session token.
+- **Resource Access**: Use library's session token to access resources.
+
+
+Understood. Here’s a shorter version:
+
+
+## 3) Bearer Authentication (type of token based authentication)
+
+## Description
+Uses a token in the request header to access resources. The token grants access.
+
+## Process
+1. **Login**: User logs in with credentials.
+2. **Token Issuance**: Server issues a token.
+3. **Requests**: Client sends token in `Authorization` header.
+4. **Verification**: Server verifies the token.
+5. **Access**: Access granted if token is valid.
+
+## Implementation
+- **Header Example**: `Authorization: Bearer abc123xyz789`
+- **Token**: Server generates token (e.g., JWT).
+
+## Security
+- **Signed Tokens**: Prevent tampering.
+- **Expiration**: Tokens should expire.
+- **HTTPS**: Secure transmission.
+- **Secure Storage**: Store tokens securely.
+
+## Example
+
+### Login Request
+```http
+POST /login
+{
+    "username": "alice",
+    "password": "password123"
+}
+```
+
+### Server Response
+```json
+{
+    "token": "abc123xyz789"
+}
+```
+
+### Authenticated Request
+```http
+GET /protected-resource
+Authorization: Bearer abc123xyz789
+```
+
+## Summary
+Bearer authentication uses tokens for secure access to resources. It's more secure than basic and API key authentication.
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# Types of Authorization
+
+## 1. No Authorization
+- **Description**: No authorization is required to access resources.
+- **Use Case**: Public resources or information.
+- **Implementation**: No checks are performed.
+- **Security**: No security controls.
+
+## 2. Role-Based Access Control (RBAC)
+- **Description**: Access is granted based on the user's role.
+- **Use/Authorization Process**:
+  - User is assigned one or more roles (e.g., admin, user).
+  - Each role has permissions to access specific resources.
+  - Server checks the user's role to determine access.
+- **Implementation**:
+  - Define roles and permissions.
+  - Assign roles to users.
+  - Check roles during resource access.
+
+```plaintext
+Database:
+| User ID | Role   |
+|---------|--------|
+| 1       | admin  |
+| 2       | user   |
+
+Permissions:
+| Role   | Resource    | Action |
+|--------|-------------|--------|
+| admin  | /users      | GET    |
+| admin  | /users      | POST   |
+| user   | /profile    | GET    |
+```
+
+- **Security**:
+  - Ensure roles and permissions are properly defined.
+  - Regularly review and update roles.
+
+## 3. Attribute-Based Access Control (ABAC)
+- **Description**: Access is granted based on attributes of the user, resource, and environment.
+- **Use/Authorization Process**:
+  - Define policies based on attributes (e.g., user role, resource type, time of day).
+  - Check policies during resource access.
+- **Implementation**:
+  - Define attributes and policies.
+  - Evaluate policies during access requests.
+
+```plaintext
+Database:
+| User ID | Attributes                      |
+|---------|---------------------------------|
+| 1       | {"role": "admin", "department": "HR"} |
+| 2       | {"role": "user", "department": "IT"}  |
+
+Policies:
+| Attribute              | Resource | Action | Condition             |
+|------------------------|----------|--------|-----------------------|
+| role == "admin"        | /users   | GET    |                       |
+| role == "user"         | /profile | GET    |                       |
+| department == "HR"     | /payroll | GET    | time < 18:00          |
+```
+
+- **Security**:
+  - Ensure policies are comprehensive and up-to-date.
+  - Regularly audit attribute data.
+
+## 4. OAuth 2.0 Scopes and Permissions
+- **Description**: Access is granted based on scopes and permissions defined in OAuth tokens.
+- **Use/Authorization Process**:
+  - User grants permissions (scopes) to an application.
+  - Access token includes granted scopes.
+  - Server checks scopes in the token to determine access.
+- **Implementation**:
+  - Define scopes and permissions.
+  - Include scopes in access tokens.
+  - Check scopes during resource access.
+
+```plaintext
+Access Token:
+{
+    "scopes": ["read_profile", "write_profile"]
+}
+
+Database:
+| Scope           | Resource    | Action |
+|-----------------|-------------|--------|
+| read_profile    | /profile    | GET    |
+| write_profile   | /profile    | POST   |
+```
+
+- **Security**:
+  - Limit scopes to the minimum necessary permissions.
+  - Use short-lived access tokens.
+
+## 5. Policy-Based Access Control (PBAC)
+- **Description**: Access is granted based on complex policies that can include roles, attributes, and environmental conditions.
+- **Use/Authorization Process**:
+  - Define detailed policies combining roles, attributes, and conditions.
+  - Evaluate policies during access requests.
+- **Implementation**:
+  - Define policies using a policy language (e.g., XACML).
+  - Use a policy decision point (PDP) to evaluate policies.
+
+```plaintext
+Policies:
+<PolicySet>
+    <Policy>
+        <Rule Effect="Permit">
+            <Condition>
+                <Apply FunctionId="urn:oasis:names:tc:xacml:1.0:function:string-equal">
+                    <AttributeValue>admin</AttributeValue>
+                    <AttributeDesignator AttributeId="role" />
+                </Apply>
+            </Condition>
+        </Rule>
+    </Policy>
+</PolicySet>
+```
+
+- **Security**:
+  - Ensure policies are comprehensive and correctly implemented.
+  - Regularly audit and update policies.
+
+## Summary
+- **No Authorization**: Public access with no controls.
+- **Role-Based Access Control (RBAC)**: Simple, role-based permissions.
+- **Attribute-Based Access Control (ABAC)**: Flexible, attribute-based policies.
+- **OAuth 2.0 Scopes and Permissions**: Fine-grained permissions using OAuth tokens.
+- **Policy-Based Access Control (PBAC)**: Complex, detailed policy evaluation.
+```
+
+You can save this summary into a `.md` file for quick reference.
