@@ -486,6 +486,136 @@ Policies:
 - **Attribute-Based Access Control (ABAC)**: Flexible, attribute-based policies.
 - **OAuth 2.0 Scopes and Permissions**: Fine-grained permissions using OAuth tokens.
 - **Policy-Based Access Control (PBAC)**: Complex, detailed policy evaluation.
+
+>>>>>>>>>>>>>>>
+
+### JWT (JSON Web Token) Summary
+
+#### What is JWT?
+
+JSON Web Token (JWT) is an open standard (RFC 7519) for securely transmitting information between parties as a JSON object. It is commonly used for authentication and information exchange.
+
+#### Structure of JWT
+
+A JWT consists of three parts separated by dots (.):
+
+1. **Header**: Contains metadata about the token, such as the type of token (JWT) and the signing algorithm (e.g., HMAC SHA256 or RSA).
+2. **Payload**: Contains the claims. Claims are statements about an entity (typically, the user) and additional data.
+3. **Signature**: Used to verify the token's integrity and authenticity. It is created by encoding the header and payload and signing them with a secret key or a private key.
+
+Example JWT:
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 ```
 
-You can save this summary into a `.md` file for quick reference.
+#### Header
+
+The header typically consists of two parts:
+- **alg**: The signing algorithm being used (e.g., HS256).
+- **typ**: The type of token (JWT).
+
+Example:
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+```
+
+#### Payload
+
+The payload contains the claims. Claims are statements about an entity (typically, the user) and additional data. There are three types of claims:
+- **Registered claims**: Predefined claims that are not mandatory but recommended, e.g., `iss` (issuer), `exp` (expiration time), `sub` (subject), `aud` (audience).
+- **Public claims**: Custom claims created to share information, such as user ID or roles.
+- **Private claims**: Custom claims created to share information between parties that agree on using them.
+
+Example:
+```json
+{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "admin": true,
+  "iat": 1516239022
+}
+```
+
+#### Signature
+
+To create the signature part, you have to take the encoded header, the encoded payload, a secret, and the algorithm specified in the header. The signature is used to verify the token's integrity and authenticity.
+
+Example using HMAC SHA256:
+```
+HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),
+  secret
+)
+```
+
+#### How JWT Works
+
+1. **User Authentication**: When a user logs in, the server validates the credentials and issues a JWT.
+2. **Token Storage**: The client stores the JWT, typically in local storage or a cookie.
+3. **Subsequent Requests**: The client includes the JWT in the `Authorization` header of subsequent requests.
+4. **Token Verification**: The server verifies the JWT's signature and extracts the claims to determine the user's identity and permissions.
+
+#### JWT Usage in HTTP Requests
+
+The JWT is usually sent in the HTTP `Authorization` header using the Bearer schema:
+
+```
+Authorization: Bearer <token>
+```
+
+#### Security Considerations
+
+1. **Secret Management**: Keep your signing key secret and rotate it periodically.
+2. **Expiration**: Always set an expiration (`exp`) claim to limit the token's lifespan.
+3. **HTTPS**: Always use HTTPS to prevent token interception.
+4. **Algorithm Confusion**: Avoid using the `alg` parameter in a way that allows attackers to choose an insecure algorithm.
+
+#### JWT Libraries
+
+There are various libraries available to work with JWT in different programming languages:
+
+- **Node.js**: `jsonwebtoken`
+- **Python**: `PyJWT`
+- **Java**: `jjwt`
+- **Go**: `golang-jwt`
+
+### Example Implementation
+
+#### Node.js Example
+
+Install the `jsonwebtoken` library:
+
+```bash
+npm install jsonwebtoken
+```
+
+Create and verify a token:
+
+```javascript
+const jwt = require('jsonwebtoken');
+
+const payload = { name: "John Doe", admin: true };
+const secret = 'your-256-bit-secret';
+const options = { expiresIn: '1h' };
+
+// Create a token
+const token = jwt.sign(payload, secret, options);
+console.log('Token:', token);
+
+// Verify a token
+jwt.verify(token, secret, (err, decoded) => {
+  if (err) {
+    console.log('Token verification failed:', err);
+  } else {
+    console.log('Decoded payload:', decoded);
+  }
+});
+```
+
+### Conclusion
+
+JWT is a robust and widely-used standard for securely transmitting information between parties. By understanding its structure, usage, and security considerations, you can effectively implement JWT for authentication and secure data exchange in your applications.
