@@ -47,7 +47,9 @@ app.get("/filter", (req, res) => {
     res.status(400).json({ error: "Missing required query parameter: type" });
     return;
   }
-  const filteredJokes = jokes.filter((element) => element.jokeType === jokeType);
+  const filteredJokes = jokes.filter(
+    (element) => element.jokeType === jokeType
+  );
 
   if (filteredJokes.length === 0) {
     res.status(404).json({ error: `Joke category '${jokeType}' not found` });
@@ -57,8 +59,53 @@ app.get("/filter", (req, res) => {
 });
 
 //4. POST a new joke
+app.post("/jokes", (req, res) => {
+  const jokeText = req.body.jokeText;
+  const jokeType = req.body.jokeType;
+
+  if (!jokeText || !jokeType) {
+    res.status(400).json({ error: "jokeText and jokeType are required" });
+    return;
+  }
+
+  const newJoke = {
+    id: jokes.length + 1,
+    jokeText: jokeText,
+    jokeType: jokeType,
+  };
+
+  //add new joke
+  jokes.push(newJoke);
+  res.status(201).json(newJoke);
+});
 
 //5. PUT a joke
+app.put("/jokes/:id", (req, res) => {
+  const idParam = req.params.id;
+  if (!/^\d+$/.test(idParam)) {
+    res.status(400).json({ error: "Invalid Joke ID" });
+    return;
+  }
+  const jokeId = parseInt(idParam, 10);
+  const jokeText = req.body.jokeText;
+  const jokeType = req.body.jokeType;
+
+  const updatedJoke = {
+    id: jokeId,
+    jokeText: jokeText,
+    jokeType: jokeType,
+  };
+
+  if (!jokeText || !jokeType) {
+    const jokeIndex = jokes.findIndex((element) => (element.id = jokeId));
+    if (jokeIndex === -1){
+      res.status(404).json({error : `The id ${jokeId}`});
+    }
+    jokes[jokeIndex] = updatedJoke;
+  }
+
+  res.status(201).json(updatedJoke);
+});
 
 //6. PATCH a joke
 
