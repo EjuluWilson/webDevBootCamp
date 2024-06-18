@@ -114,6 +114,7 @@ The `flex` property is a shorthand for setting `flex-grow`, `flex-shrink`, and `
 - `===` evaluates both the datatype and value. `==` does not care about the data type. Similary, use `!==`.
 - `() =>` Arrow functions do not have their own this context. Instead, they inherit this from the surrounding lexical scope. This makes them unsuitable for event handlers if you need this to refer to the event target. However, they are useful in other contexts where you want to maintain the this context from the enclosing scope.
 - Can't compare lists like in python.
+- The `forEach` loop does not support breaking out of the loop early or returning a value. It is used when you need to execute a provided function once for each array element.
 
 #### Async await, promises and callbacks.
 - In js, none blocking code (asynchronous code) is pull await from the single executing thread buy browser or nodejs mechanisms, tracked and placed back in the thread after execution.

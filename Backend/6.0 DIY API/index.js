@@ -7,11 +7,54 @@ const masterKey = "4VGP2DN-6EWM4SJ-N6FGRHV-Z3PR3TT";
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// returns a random joke object from a provided array
+function getRandomJoke(jokeOjectArray) {
+  const arrayLenght = jokeOjectArray.length;
+  const rondomIndex = Math.floor(Math.random() * arrayLenght);
+  return jokeOjectArray[rondomIndex];
+}
+
 //1. GET a random joke
+app.get("/random", (req, res) => {
+  res.json(getRandomJoke(jokes));
+});
 
 //2. GET a specific joke
+app.get("/jokes/:id", (req, res) => {
+  const idParam = req.params.id;
+  if (!/^\d+$/.test(idParam)) {
+    res.status(400).json({ error: "Invalid Joke ID" });
+    return;
+  }
+  const jokeId = parseInt(idParam, 10);
+
+  if (isNaN(jokeId)) {
+    res.status(400).json({ error: "Invalid Joke ID" });
+    return;
+  }
+  const joke = jokes.find((element) => element.id === jokeId);
+  if (!joke) {
+    res.status(404).json({ error: " Resource not found" });
+  } else {
+    res.json(joke);
+  }
+});
 
 //3. GET a jokes by filtering on the joke type
+app.get("/filter", (req, res) => {
+  const jokeType = req.query.type;
+  if (!jokeType) {
+    res.status(400).json({ error: "Missing required query parameter: type" });
+    return;
+  }
+  const filteredJokes = jokes.filter((element) => element.jokeType === jokeType);
+
+  if (filteredJokes.length === 0) {
+    res.status(404).json({ error: `Joke category '${jokeType}' not found` });
+  } else {
+    res.status(200).json(filteredJokes);
+  }
+});
 
 //4. POST a new joke
 
