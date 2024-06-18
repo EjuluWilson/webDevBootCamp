@@ -90,21 +90,26 @@ app.put("/jokes/:id", (req, res) => {
   const jokeText = req.body.jokeText;
   const jokeType = req.body.jokeType;
 
+  if (!jokeText || !jokeType) {
+    res.status(400).json({ error: "Invalid jokeText or jokeType" });
+    return;
+  }
+
   const updatedJoke = {
     id: jokeId,
     jokeText: jokeText,
     jokeType: jokeType,
   };
 
-  if (!jokeText || !jokeType) {
-    const jokeIndex = jokes.findIndex((element) => (element.id = jokeId));
-    if (jokeIndex === -1){
-      res.status(404).json({error : `The id ${jokeId}`});
-    }
-    jokes[jokeIndex] = updatedJoke;
+  const jokeIndex = jokes.findIndex((element) => element.id === jokeId);
+  if (jokeIndex === -1) {
+    res
+      .status(404)
+      .json({ error: `Object with id '${jokeId}' does not exist` });
+    return;
   }
-
-  res.status(201).json(updatedJoke);
+  jokes[jokeIndex] = updatedJoke;
+  res.status(200).json(updatedJoke);
 });
 
 //6. PATCH a joke
