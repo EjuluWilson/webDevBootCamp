@@ -113,10 +113,64 @@ app.put("/jokes/:id", (req, res) => {
 });
 
 //6. PATCH a joke
+app.patch("/jokes/:id", (req, res) => {
+  const idParam = req.params.id;
+  if (!/^\d+$/.test(idParam)) {
+    res.status(400).json({ error: "Invalid Joke ID" });
+    return;
+  }
+
+  const jokeId = parseInt(idParam, 10);
+  const jokeText = req.body.jokeText;
+  const jokeType = req.body.jokeType;
+
+  const jokeIndex = jokes.findIndex((element) => element.id === jokeId);
+  if (jokeIndex === -1) {
+    res
+      .status(404)
+      .json({ error: `Object with id '${jokeId}' does not exist` });
+    return;
+  }
+
+  if (jokeText !== undefined && jokeText.trim() !== "")
+    jokes[jokeIndex].jokeText = jokeText;
+  if (jokeType !== undefined && jokeType.trim() !== "")
+    jokes[jokeIndex].jokeType = jokeType;
+
+  res.status(200).json(jokes[jokeIndex]);
+});
 
 //7. DELETE Specific joke
+app.delete("/jokes/:id", (req, res) => {
+  const idParam = req.params.id;
+  if (!/^\d+$/.test(idParam)) {
+    res.status(400).json({ error: "Invalid Joke ID" });
+    return;
+  }
+  const jokeId = parseInt(idParam, 10);
+
+  //get object index
+  const jokeIndex = jokes.findIndex((element) => element.id === jokeId);
+  if (jokeIndex === -1) {
+    res
+      .status(404)
+      .json({ error: `Object with id '${jokeId}' does not exist` });
+    return;
+  }
+  jokes.splice(jokeIndex, 1);
+  res.status(204).send();
+});
 
 //8. DELETE All jokes
+app.delete("/all", (req, res) => {
+  const key = req.query.key;
+  if (key !== masterKey) {
+    res.status(403).json({ error: "Access denied : invalid key" });
+    return;
+  }
+  jokes = [];
+  res.status(204).send();
+});
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
