@@ -30,30 +30,32 @@ app.get("/", async (req, res) => {
   res.render("index.ejs", { countries: countries, total: countries.length });
 });
 
-//
 app.post("/add", async (req, res) => {
   const { country } = req.body;
   try {
-    const countryData = await db.query("SELECT c_code,c_name FROM countries");
-    const matchingCountry = countryData.rows.find(
-      (element) => element.c_name.toLowerCase() === country.toLowerCase()
-    );
-
-    if (matchingCountry) {
-      const countryCode = matchingCountry.c_code;
+    const countryData = (
+      await db.query(
+        "SELECT * FROM countries WHERE LOWER(c_name) = LOWER($1)",
+        [country]
+      )
+    ).rows;
+    if (countryData.length > 0) {
+      const countryCode = countryData[0].c_code;
       await db.query(
         `INSERT INTO visited_countries (country) VALUES ($1) ON CONFLICT DO NOTHING`,
         [countryCode]
       );
       res.status(302).redirect("/");
+      console.log(countryData);
     } else {
       res.status(404).json({ error: "Invalid country name" });
     }
   } catch (error) {
-    console.error("Database querry failed: ", error);
+    console.error("Database query failed: ", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
