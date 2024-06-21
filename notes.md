@@ -119,6 +119,118 @@ The `flex` property is a shorthand for setting `flex-grow`, `flex-shrink`, and `
 #### Async await, promises and callbacks.
 - In js, none blocking code (asynchronous code) is pull await from the single executing thread buy browser or nodejs mechanisms, tracked and placed back in the thread after execution.
 - `Async await`, is syntactic sugar around promises. It always returns a promise. You can then go ahead to use the then and catch methods on what is returned if need b.
+
+## Cool Javascript array Methods
+
+1. **`forEach`**: Executes a provided function once for each array element.
+   ```javascript
+   array.forEach(element => {
+     console.log(element);
+   });
+   ```
+   - **Return on Failure**: Does not return a value; `forEach` always returns `undefined`.
+
+2. **`map`**: Creates a new array populated with the results of calling a provided function on every element in the calling array.
+   ```javascript
+   const newArray = array.map(element => element * 2);
+   ```
+   - **Return on Failure**: Always returns a new array with the same length as the original array.
+
+3. **`filter`**: Creates a new array with all elements that pass the test implemented by the provided function.
+   ```javascript
+   const filteredArray = array.filter(element => element > 10);
+   ```
+   - **Return on Failure**: Returns an empty array if no elements pass the test.
+
+4. **`reduce`**: Executes a reducer function on each element of the array, resulting in a single output value.
+   ```javascript
+   const sum = array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+   ```
+   - **Return on Failure**: Throws a `TypeError` if the array is empty and no initial value is provided.
+
+5. **`some`**: Tests whether at least one element in the array passes the test implemented by the provided function.
+   ```javascript
+   const hasPositiveNumbers = array.some(element => element > 0);
+   ```
+   - **Return on Failure**: Returns `false` if no elements pass the test.
+
+6. **`every`**: Tests whether all elements in the array pass the test implemented by the provided function.
+   ```javascript
+   const allPositiveNumbers = array.every(element => element > 0);
+   ```
+   - **Return on Failure**: Returns `false` if any element fails the test.
+
+7. **`find`**: Returns the first element in the array that satisfies the provided testing function.
+   ```javascript
+   const found = array.find(element => element > 10);
+   ```
+   - **Return on Failure**: Returns `undefined` if no elements satisfy the testing function.
+
+8. **`findIndex`**: Returns the index of the first element in the array that satisfies the provided testing function. Otherwise, it returns -1.
+   ```javascript
+   const index = array.findIndex(element => element > 10);
+   ```
+   - **Return on Failure**: Returns `-1` if no elements satisfy the testing function.
+
+9. **`includes`**: Determines whether an array includes a certain value among its entries, returning `true` or `false`.
+   ```javascript
+   const includesValue = array.includes(10);
+   ```
+   - **Return on Failure**: Returns `false` if the value is not found.
+
+10. **`sort`**: Sorts the elements of an array in place and returns the array.
+    ```javascript
+    array.sort((a, b) => a - b); // For numerical sorting
+    ```
+    - **Return on Failure**: The array is modified but there is no specific "failure" return value; incorrect sorting might occur if the comparison function is not defined correctly.
+
+11. **`reverse`**: Reverses the order of the elements in an array.
+    ```javascript
+    array.reverse();
+    ```
+    - **Return on Failure**: The array is reversed but there is no specific "failure" return value.
+
+12. **`concat`**: Merges two or more arrays, returning a new array.
+    ```javascript
+    const newArray = array1.concat(array2);
+    ```
+    - **Return on Failure**: Always returns a new array combining all input arrays.
+
+13. **`slice`**: Returns a shallow copy of a portion of an array into a new array object.
+    ```javascript
+    const newArray = array.slice(1, 3);
+    ```
+    - **Return on Failure**: Returns an empty array if the start index is greater than the end index or outside the array bounds.
+
+14. **`splice`**: Changes the contents of an array by removing or replacing existing elements and/or adding new elements in place.
+    ```javascript
+    array.splice(1, 0, 'newElement'); // Adds 'newElement' at index 1
+    ```
+    - **Return on Failure**: Always returns an array containing the deleted elements, which could be empty if no elements are removed.
+
+## Example Usage
+
+### Using `find` Correctly
+
+```javascript
+app.post("/add", async (req, res) => {
+  const addedCountry = req.body.country;
+  const countryData = await db.query("SELECT c_code, c_name FROM countries");
+
+  const matchingCountry = countryData.rows.find(
+    (element) => element.c_name.toLowerCase() === addedCountry.toLowerCase()
+  );
+
+  if (matchingCountry) {
+    res.send(`Country found: ${matchingCountry.c_name}`);
+  } else {
+    res.send("Country not found");
+  }
+});
+```
+
+This example shows how to use the `find` method to search for a country in a database query result.
+```
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Types of Authentication
 
