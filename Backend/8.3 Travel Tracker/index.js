@@ -22,7 +22,6 @@ db.connect();
 
 let countries = [];
 
-
 app.get("/", async (req, res) => {
   const results = (await db.query("SELECT country FROM visited_countries"))
     .rows;
@@ -48,15 +47,12 @@ app.post("/add", async (req, res) => {
         [countryCode]
       );
       res.status(302).redirect("/");
-      console.log(countryData);
     } else {
-      res
-        .status(404)
-        .render("index.ejs", {
-          countries: countries,
-          total: countries.length,
-          error: "Enter a valid county name",
-        });
+      res.status(404).render("index.ejs", {
+        countries: countries,
+        total: countries.length,
+        error: "Enter a valid county name",
+      });
     }
   } catch (error) {
     console.error("Database query failed: ", error);
