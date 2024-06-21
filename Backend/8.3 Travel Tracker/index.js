@@ -20,8 +20,10 @@ const db = new pg.Client({
 //connect to database
 db.connect();
 
+let countries = [];
+
+
 app.get("/", async (req, res) => {
-  let countries = [];
   const results = (await db.query("SELECT country FROM visited_countries"))
     .rows;
   results.forEach((element) => {
@@ -48,7 +50,13 @@ app.post("/add", async (req, res) => {
       res.status(302).redirect("/");
       console.log(countryData);
     } else {
-      res.status(404).json({ error: "Invalid country name" });
+      res
+        .status(404)
+        .render("index.ejs", {
+          countries: countries,
+          total: countries.length,
+          error: "Enter a valid county name",
+        });
     }
   } catch (error) {
     console.error("Database query failed: ", error);
