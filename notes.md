@@ -228,9 +228,6 @@ app.post("/add", async (req, res) => {
   }
 });
 ```
-
-This example shows how to use the `find` method to search for a country in a database query result.
-```
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Types of Authentication
 

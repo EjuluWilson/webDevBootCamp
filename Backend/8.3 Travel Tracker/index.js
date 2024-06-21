@@ -21,7 +21,6 @@ const db = new pg.Client({
 db.connect();
 
 app.get("/", async (req, res) => {
-  //Write your code here.
   let countries = [];
   const results = (await db.query("SELECT country FROM visited_countries"))
     .rows;
@@ -31,23 +30,28 @@ app.get("/", async (req, res) => {
   res.render("index.ejs", { countries: countries, total: countries.length });
 });
 
+//
 app.post("/add", async (req, res) => {
-  const addedCountry = req.body.country;
-  const countryData = await db.query("SELECT c_code,c_name FROM countries");
-
-  const matchingCountry = countryData.rows.find(
-    (element) => element.c_name.toLowerCase() === addedCountry.toLowerCase()
-  );
-
-  if (matchingCountry) {
-    const countryCode = matchingCountry.c_code;
-    await db.query(
-      `INSERT INTO visited_countries (country) VALUES ($1) ON CONFLICT DO NOTHING`,
-      [countryCode]
+  const { country } = req.body;
+  try {
+    const countryData = await db.query("SELECT c_code,c_name FROM countries");
+    const matchingCountry = countryData.rows.find(
+      (element) => element.c_name.toLowerCase() === country.toLowerCase()
     );
-    res.redirect("/");
-  } else {
-    res.status(404).json({ error: "Invalid country name" });
+
+    if (matchingCountry) {
+      const countryCode = matchingCountry.c_code;
+      await db.query(
+        `INSERT INTO visited_countries (country) VALUES ($1) ON CONFLICT DO NOTHING`,
+        [countryCode]
+      );
+      res.status(302).redirect("/");
+    } else {
+      res.status(404).json({ error: "Invalid country name" });
+    }
+  } catch (error) {
+    console.error("Database querry failed: ", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
