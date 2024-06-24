@@ -52,7 +52,6 @@ app.post("/register", async (req, res) => {
         "INSERT INTO users (username, password) VALUES ($1, $2)",
         [email, hashedPassword]
       );
-      console.log(result);
       res.render("secrets.ejs");
     }
   } catch (err) {
@@ -70,9 +69,13 @@ app.post("/login", async (req, res) => {
     ]);
     if (result.rows.length > 0) {
       const user = result.rows[0];
-      const storedPassword = user.password;
+      const storedHashedPassword = user.password;
+      const isValidPassword = await bcrypt.compare(
+        password,
+        storedHashedPassword
+      );
 
-      if (password === storedPassword) {
+      if (isValidPassword) {
         res.render("secrets.ejs");
       } else {
         res.send("Incorrect Password");
