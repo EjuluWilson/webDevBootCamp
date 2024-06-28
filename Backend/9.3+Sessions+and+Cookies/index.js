@@ -97,7 +97,7 @@ app.get("/register", (req, res) => {
 
 //returns the secrets page
 app.get("/secrets", (req, res) => {
-  if (req.isAuthenticated) {
+  if (req.isAuthenticated()) {
     res.status(200).render("secrets.ejs");
   } else {
     res.status(301).redirect("/login");
@@ -145,6 +145,16 @@ app.post(
     successRedirect: "/secrets",
   })
 );
+
+//handle logout
+app.get("/logout",(req,res)=>{
+  req.logOut((err)=>{
+    if(err){
+      return next(err);
+    }
+    res.status(302).redirect("/");
+  })
+})
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
