@@ -2,95 +2,148 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import bcrypt from "bcrypt";
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import session from "express-session";
 
 const app = express();
 const port = 3000;
-const saltRounds = 10;
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
 
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
   database: "secrets",
-  password: "123456",
-  port: 5432,
+  host: "localhost",
+  port: "5432",
+  user: "postgres",
+  password: "data@04!!",
 });
+
 db.connect();
 
+//middleware setup
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
+app.use(
+  session({
+    secret: "your_secret_key",
+    resave: false, // Don't save the session if it hasn't been modified
+    saveUninitialized: false, // Don't create a session until something is stored
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
+//error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack); //Log for debugging
+  res
+    .status(500)
+    .json({ message: "Internal Server Error", error: err.message });
+});
+
+//define a local strategy
+passport.use(
+  new LocalStrategy(async (username, password, cb) => {
+    try {
+      const res = await db.query("SELECT * FROM users WHERE username = $1", [
+        username,
+      ]);
+
+      //get user data
+      const user = res.rows[0];
+
+      if (!user) {
+        return cb(null, false, { message: "User does not exist" });
+      } else {
+        //validate bcrypted password
+        const hashedPassword = user.password;
+        const isAuthenticated = await bcrypt.compare(password, hashedPassword);
+
+        if (isAuthenticated) {
+          cb(null, user);
+        } else {
+          return cb(null, false, { message: "Invalid password" });
+        }
+      }
+    } catch (error) {
+      return cb(error);
+    }
+  })
+);
+
+//serialise user
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+//deserialise user
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
+});
+
+//returns the homepage
 app.get("/", (req, res) => {
   res.render("home.ejs");
 });
 
+//returns the login page
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
 
+//returns the register page
 app.get("/register", (req, res) => {
   res.render("register.ejs");
 });
 
+//returns the secrets page
+app.get("/secrets", (req, res) => {
+  if (req.isAuthenticated) {
+    res.status(200).render("secrets.ejs");
+  } else {
+    res.status(301).redirect("/login");
+  }
+});
+
+//handle user registeration
 app.post("/register", async (req, res) => {
-  const email = req.body.username;
-  const password = req.body.password;
+  const { username, password } = req.body;
 
   try {
-    const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-    if (checkResult.rows.length > 0) {
-      res.send("Email already exists. Try logging in.");
-    } else {
-      //hashing the password and saving it in the database
-      bcrypt.hash(password, saltRounds, async (err, hash) => {
-        if (err) {
-          console.error("Error hashing password:", err);
-        } else {
-          console.log("Hashed Password:", hash);
-          await db.query(
-            "INSERT INTO users (email, password) VALUES ($1, $2)",
-            [email, hash]
-          );
-          res.render("secrets.ejs");
-        }
-      });
+    const response = await db.query(
+      "INSERT INTO users (username,password) VALUES ($1, $2) RETURNING *",
+      [username, hashedPassword]
+    );
+
+    const user = response.rows[0];
+
+    //login user
+    req.login(user, (error) => {
+      if (error) {
+        return next(error);
+      }
+      return res.redirect("/secrets");
+    });
+
+    // catch any other errors
+  } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({ message: "User already exists" });
     }
-  } catch (err) {
-    console.log(err);
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-app.post("/login", async (req, res) => {
-  const email = req.body.username;
-  const loginPassword = req.body.password;
-
-  try {
-    const result = await db.query("SELECT * FROM users WHERE email = $1", [
-      email,
-    ]);
-    if (result.rows.length > 0) {
-      const user = result.rows[0];
-      const storedHashedPassword = user.password;
-      bcrypt.compare(loginPassword, storedHashedPassword, (err, result) => {
-        if (err) {
-          console.error("Error comparing passwords:", err);
-        } else {
-          if (result) {
-            res.render("secrets.ejs");
-          } else {
-            res.send("Incorrect Password");
-          }
-        }
-      });
-    } else {
-      res.send("User not found");
-    }
-  } catch (err) {
-    console.log(err);
-  }
-});
+//handle user login
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    successRedirect: "/secrets",
+  })
+);
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
