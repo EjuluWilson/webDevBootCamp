@@ -885,6 +885,11 @@ In summary, `return next(err)` is a crucial part of building robust Express.js a
 >>>>>>>>>>>>>>>>>
 # React.js
 
-# UI/UX
 > React controlled components 
 ![Color theory](./react_controlled_components.png)
+
+> React Hooks
+- Never extract an event inside a hook (something to do with synthetic event used for performance reasons). Instead, always destructure the event outside the state e.g `{value, name } = event.target;` 
+- In JavaScript, objects and arrays are reference types, which means that when you assign them to a variable or pass them to a function, you are assigning or passing a reference to the original object or array, not a copy. When you directly modify the properties of such objects or arrays, you are modifying the original object in memory. This is known as "mutating" the object.  
+
+In React, state should be treated as immutable, meaning you should not directly modify the state object but instead create a new object with the updated values. This is important because React relies on state immutability to efficiently determine when a component needs to be re-rendered.
